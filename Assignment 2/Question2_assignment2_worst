@@ -1,0 +1,33 @@
+% Container dimensions
+container(4, 6).
+
+% Items with their dimensions (ID, Height, Width)
+item(1, 1, 3).
+item(2, 2, 2).
+item(3, 2, 3).
+item(4, 3, 3).
+
+% Generating all possible X and Y coordinates within the container
+% Adjust according to the maximum expected dimensions for efficiency
+range(0..6). % Assuming a maximum dimension, adjust based on container size
+
+% Define valid positions for each item considering its size and the container bounds
+valid_position(ItemID, X, Y) :-
+    item(ItemID, Height, Width),
+    container(ContainerHeight, ContainerWidth),
+    range(X), range(Y),
+    X + Width <= ContainerWidth,
+    Y + Height <= ContainerHeight.
+
+% Encode the choice to place each item at a valid position, ensuring it fits within the container
+1 { placed(ItemID, X, Y) : valid_position(ItemID, X, Y) } 1 :- item(ItemID, _, _).
+
+% Constraint to prevent item overlap
+:- placed(I1, X1, Y1), placed(I2, X2, Y2),
+   item(I1, H1, W1), item(I2, H2, W2),
+   I1 != I2,
+   X1 < X2 + W2, X2 < X1 + W1, % Checking overlap in X direction
+   Y1 < Y2 + H2, Y2 < Y1 + H1. % Checking overlap in Y direction
+
+% Display the placement of items
+#show placed/3.
