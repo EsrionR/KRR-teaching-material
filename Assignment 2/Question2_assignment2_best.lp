@@ -14,7 +14,6 @@ number_h(Y+1) :- number_h(Y), container(H, _), Y+1 < H.
 number_w(0).
 number_w(X+1) :- number_w(X), container(_, W), X+1 < W.
 
-
 % Generate valid positions for each item considering container dimensions.
 valid_position(ItemID, X, Y) :-
     item(ItemID, Height, Width),
@@ -22,7 +21,6 @@ valid_position(ItemID, X, Y) :-
     number_w(X), number_h(Y),
     X + Width <= ContainerWidth,
     Y + Height <= ContainerHeight.
-
 
 % Choose to place each item at one of the valid positions.
 1 { placed(ItemID, X, Y) : valid_position(ItemID, X, Y) } 1 :- item(ItemID, _, _).
